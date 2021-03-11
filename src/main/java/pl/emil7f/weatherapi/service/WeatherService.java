@@ -1,29 +1,26 @@
 package pl.emil7f.weatherapi.service;
 
 import org.springframework.stereotype.Service;
-import org.springframework.web.client.RestTemplate;
 import pl.emil7f.weatherapi.model.WeatherDto;
+import pl.emil7f.weatherapi.webclient.weather.WeatherClient;
 
 @Service
 public class WeatherService {
 
-    public static final String WEATHER_URL = "http://api.openweathermap.org/data/2.5/";
-    public static final String API_KEY = "cbadd1e2fac6a5084c2c34b65afbe179";
+    private final WeatherClient weatherClient;
 
-    private  RestTemplate restTemplate = new RestTemplate();
-
-
-
+    public WeatherService(WeatherClient weatherClient) {
+        this.weatherClient = weatherClient;
+    }
 
     public WeatherDto getWeather() {
-        String forObject = getWeatherForCity("porto");
+        String forObject = weatherClient.getWeatherForCity("porto");
         System.out.println(forObject);
+
+        String forecast = weatherClient.getForecast(32.7, -16.98);
+        System.out.println(forecast);
         return null;
     }
 
 
-    private String getWeatherForCity(String city ) {
-        return restTemplate.getForObject(WEATHER_URL + "weather?q={city}&appid={apikey}&units=metric&lang=pl",
-                String.class, city, API_KEY);
-    }
 }
