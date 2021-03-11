@@ -2,6 +2,8 @@ package pl.emil7f.weatherapi.webclient.weather;
 
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
+import pl.emil7f.weatherapi.model.WeatherDto;
+import pl.emil7f.weatherapi.webclient.dto.OpenWeatherWeatherDto;
 
 @Component
 public class WeatherClient {
@@ -11,16 +13,26 @@ public class WeatherClient {
 
     private RestTemplate restTemplate = new RestTemplate();
 
-    public String getWeatherForCity(String city) {
-        return callGetMethod("weather?q={city}&appid={apikey}&units=metric&lang=pl",
-                String.class,
+    public WeatherDto getWeatherForCity(String city) {
+        OpenWeatherWeatherDto openWeatherWeatherDto = callGetMethod("weather?q={city}&appid={apikey}&units=metric&lang=pl",
+                OpenWeatherWeatherDto.class,
                 city, API_KEY);
+        WeatherDto weatherDto = new WeatherDto();
+        weatherDto.setHumidity(openWeatherWeatherDto.getMain().getHumidity());
+        weatherDto.setPressure(openWeatherWeatherDto.getMain().getPressure());
+        weatherDto.setTemperature(openWeatherWeatherDto.getMain().getTemp());
+        weatherDto.setWindSpeed(openWeatherWeatherDto.getWind().getSpeed());
+        return weatherDto;
     }
 
-    public String getForecast(double lat, double lon) {
-        return callGetMethod("onecall?lat={lat}&lon={lon}&exclude=minutely,hourly&appid={apikey}&units=metric&lang=pl",
-                String.class,
+    public WeatherDto getForecast(double lat, double lon) {
+        OpenWeatherWeatherDto openWeatherWeatherDto = callGetMethod("onecall?lat={lat}&lon={lon}&exclude=minutely,hourly&appid={apikey}&units=metric&lang=pl",
+                OpenWeatherWeatherDto.class,
                 lat, lon, API_KEY);
+
+        WeatherDto weatherDto = new WeatherDto();
+// TODO create model to forecast
+        return weatherDto;
     }
 
 

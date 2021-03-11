@@ -14,12 +14,12 @@ public class WeatherService {
     }
 
     public WeatherDto getWeather() {
-        String forObject = weatherClient.getWeatherForCity("porto");
-        System.out.println(forObject);
+        WeatherDto weatherForCity = weatherClient.getWeatherForCity("porto");
+        System.out.println(weatherForCity);
 
-        String forecast = weatherClient.getForecast(32.7, -16.98);
-        System.out.println(forecast);
-        return null;
+        WeatherDto forecast = weatherClient.getForecast(32.7, -16.98);
+
+        return weatherForCity;
     }
 
 
