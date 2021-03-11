@@ -12,12 +12,20 @@ public class WeatherClient {
     private RestTemplate restTemplate = new RestTemplate();
 
     public String getWeatherForCity(String city) {
-        return restTemplate.getForObject(WEATHER_URL + "weather?q={city}&appid={apikey}&units=metric&lang=pl",
-                String.class, city, API_KEY);
+        return callGetMethod("weather?q={city}&appid={apikey}&units=metric&lang=pl",
+                String.class,
+                city, API_KEY);
     }
 
-    public String getForecast(double lat, double lon ) {
-        return restTemplate.getForObject(WEATHER_URL + "onecall?lat={lat}&lon={lon}&exclude=minutely,hourly&appid={apikey}&units=metric&lang=pl",
-                String.class, lat, lon, API_KEY);
+    public String getForecast(double lat, double lon) {
+        return callGetMethod("onecall?lat={lat}&lon={lon}&exclude=minutely,hourly&appid={apikey}&units=metric&lang=pl",
+                String.class,
+                lat, lon, API_KEY);
+    }
+
+
+    private <T> T callGetMethod(String url, Class<T> responseType, Object... objects) {
+        return restTemplate.getForObject(WEATHER_URL + url,
+                responseType, objects);
     }
 }
